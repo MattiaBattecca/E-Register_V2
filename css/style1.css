@@ -1,0 +1,189 @@
+body{
+    font-family: sans-serif;
+    background-color: crimson;
+    padding: 5%;
+    padding-top: 2.5%;
+}
+
+head{
+    background-color: crimson;
+}
+
+h1{
+    text-align: center;
+    color: crimson;
+    font-size: 3em;
+    
+}
+h2{
+    font-size: 2em;
+    padding-bottom: .5em;
+    color:  rgb(42, 94, 206);
+}
+
+hr{
+    max-width: 90%;
+}
+
+p{
+    padding-bottom: 10px;
+}
+
+.main{
+    background-color: white;
+    border: 10%;
+    border-radius: 20px;
+}
+
+.nav{
+    padding-right: 4em;
+    padding-bottom: 3em;
+    text-align: right;
+}
+
+.btn{
+    border: black 1px;
+    background-color: rgb(42, 94, 206);
+    border-radius: 10px;
+    padding: 1%;
+    color: white;
+    text-decoration: none;
+    margin-top: .0em;
+    margin-bottom: .0em;
+    margin-left: .5em;
+    font-size: 1.5em ;
+}
+
+.dist{
+padding-top: 2em;
+}
+
+.btnsmall{
+    border: black 1px;
+    background-color: rgb(42, 94, 206);
+    border-radius: 10px;
+    padding: 1%;
+    color: white;
+    text-decoration: none;
+    margin-top: .0em;
+    margin-bottom: .0em;
+    margin-left: .5em;
+    font-size: 0.8em;
+}
+
+.error{
+    border-color: red;
+    margin: 5%;
+    padding: 2em;
+    border-radius: 10px;
+    background-color: rgb(233, 144, 144);
+}
+
+.tit{
+    color: crimson;
+    text-decoration: none;
+}
+
+.container{
+    background-color: whitesmoke;
+    margin: 5%;
+    padding: 2em;
+    border-radius: 10px;
+}
+
+.fixed{
+    top: 0;
+    bottom:0;
+    position:sticky;
+}
+
+.footer{
+    text-align: center;
+    padding: 2em;
+    font-size: 20px;
+}
+
+table, th, td {
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+    border-collapse: collapse;
+  }
+
+  th,td{
+      padding: .2em;
+      text-align: center;
+      font-size: 1.5em;
+  }
+
+  table{
+      width: 90%;
+      margin: auto;
+  }
+
+.voto{
+    font-size: 4em;
+}
+
+input{
+    width: 75%;
+    padding: 1em;
+    margin: 1em;
+    border-radius: 4px;
+}
+
+
+button{
+    width: 10%;
+    padding: 1em;
+    margin: 1em;
+    border-radius: 4px;
+}
+
+.tools{
+    margin: 2em;
+    margin-left:3em;
+}
+
+.centered{
+    text-align: center;
+    margin: auto;
+}
+
+.intestazione{
+    padding: 1em;
+    text-align: center;
+    font-size: 2.5em;
+}
+
+.search_categories{
+  font-size: 13px;
+  padding: 10px 8px 10px 14px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  max-width: 50%;
+}
+
+.search_categories .select{
+  width: 100%;
+  background:url('arrow.png') no-repeat;
+  background-position:80% center;
+}
+
+.search_categories .select select{
+  background: transparent;
+  line-height: 1;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  font-size: 1em;
+}
+
+.voti{
+    margin: 2em;
+}
