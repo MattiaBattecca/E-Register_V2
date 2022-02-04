@@ -60,11 +60,19 @@ $arr=mesi_cls($id);
             <th>Deviazione</th>
         </tr>
 
+<?php 
+$mat = stat_cls($id);
+$AVG = number_format($mat[0],2);
+$MAX = number_format($mat[1],2);
+$MIN = number_format($mat[2],2);
+$DEV = number_format($mat[3],2);
+?>
+
         <tr>
-            <td class="voto"><?=number_format(media_cls($id),2);?></td>
-            <td class="voto"><?=number_format(massimo_cls($id),2);?></td>
-            <td class="voto"><?=number_format(minimo_cls($id),2);?></td>
-            <td class="voto"><?=number_format(deviazione_cls($id),2);?></td>
+            <td class="voto"><?=$AVG?></td>
+            <td class="voto"><?=$MAX?></td>
+            <td class="voto"><?=$MIN?></td>
+            <td class="voto"><?=$DEV?></td>
         </tr>
 
     </table>

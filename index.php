@@ -48,6 +48,14 @@ $arr=mesi();
     
 </div>
 
+<?php 
+$mat = stat_tot();
+$AVG = number_format($mat[0],2);
+$MAX = number_format($mat[1],2);
+$MIN = number_format($mat[2],2);
+$DEV = number_format($mat[3],2);
+?>
+
 <div class="container" id="Voti">
     <h2>Statistiche generali</h2>
     <table>
@@ -59,10 +67,10 @@ $arr=mesi();
         </tr>
 
         <tr>
-            <td class="voto"><?=number_format(media_tot()[0],2);?></td>
-            <td class="voto"><?=number_format(massimo_tot()[0],2);?></td>
-            <td class="voto"><?=number_format(minimo_tot()[0],2);?></td>
-            <td class="voto"><?=number_format(deviazione_tot()[0],2);?></td>
+            <td class="voto"><?=$AVG?></td>
+            <td class="voto"><?=$MAX?></td>
+            <td class="voto"><?=$MIN?></td>
+            <td class="voto"><?=$DEV?></td>
         </tr>
 
     </table>

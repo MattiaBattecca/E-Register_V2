@@ -29,7 +29,7 @@ $mat = materia_by_id($id_mat);
       <td><?=$record[1]?></td>
       <td><?=$record[2]?></td>
       <td><a class="btnsmall"
-          href="situazione_studente.php?id$id=<?=$id?>&id_std=<?=$record[0]?>&id_mat=<?=$id_mat?>">Visualizza</a>
+          href="situazione_studente.php?id=<?=$id?>&id_std=<?=$record[0]?>&id_mat=<?=$id_mat?>">Visualizza</a>
       </td>
     </tr>
     <?php } ?>

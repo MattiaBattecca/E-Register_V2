@@ -20,13 +20,13 @@ $std = nome_std($id_std);
 
   <div class="voti">
     <?php foreach($voti as $record){ ?>
-    <a href="edit_voto.php?id$id=<?=$id?>&id_std=<?=$id_std?>&id_mat=<?=$id_mat?>&id_voto=<?=$record[0]?>"
+    <a href="edit_voto.php?id=<?=$id?>&id_std=<?=$id_std?>&id_mat=<?=$id_mat?>&id_voto=<?=$record[0]?>"
       class="btnsmall"> <?=$record[1]?></a>
     <?php } ?>
 
   </div>
   <p class="dist">
-    <a href="inserisci_voto.php?id$id=<?=$id?>&id_std=<?=$id_std?>&id_mat=<?=$id_mat?>" class="btn ">Inserisci</a>
+    <a href="inserisci_voto.php?id=<?=$id?>&id_std=<?=$id_std?>&id_mat=<?=$id_mat?>" class="btn ">Inserisci</a>
   </p>
 </div>
 

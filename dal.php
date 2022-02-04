@@ -2,8 +2,9 @@
 include "config.php";
 
 // ---------------------------------- CONNESSIONE ----------------------------------
+
 function db_connect(){
-  $mysqli = new mysqli("localhost", "eregister2", "W.n4#JtM", "eregister2");
+  $mysqli = new mysqli(SERVER, USERNAME,PASSWORD, DATABASE);
   if($mysqli->connect_error){
     die('Connection failed. Error: '. $mysqli->connect_error);
   }
@@ -12,9 +13,9 @@ function db_connect(){
 
 // ---------------------------------- MATEMATICA ----------------------------------
 
-function media_tot(){
+function stat_tot(){
   $mysqli=db_connect();
-  $sql="SELECT AVG(valore) FROM(SELECT voto.valore FROM voto) AS media_tot";
+  $sql="SELECT AVG(voto.valore) AS 'avg', MAX(voto.valore) AS 'max', MIN(voto.valore) AS 'min', STDDEV_POP(voto.valore) AS 'dev' FROM voto";
   $result=$mysqli->query($sql);
   $data=$result->fetch_all();
   $result->free();
@@ -22,227 +23,82 @@ function media_tot(){
   return $data[0];
 }
 
-function massimo_tot(){
+function stat_cls($classe){
   $mysqli=db_connect();
-  $sql="SELECT MAX(valore) FROM(SELECT voto.valore FROM voto) AS massimo_tot";
+  $sql="SELECT AVG(voto.valore) AS 'avg', MAX(voto.valore) AS 'max', MIN(voto.valore) AS 'min', STDDEV_POP(voto.valore) AS 'dev' FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe)";
   $result=$mysqli->query($sql);
   $data=$result->fetch_all();
   $result->free();
   $mysqli->close();
   return $data[0];
-}
-
-function minimo_tot(){
-  $mysqli=db_connect();
-  $sql="SELECT MIN(valore) FROM(SELECT voto.valore FROM voto) AS minimo_tot";
-  $result=$mysqli->query($sql);
-  $data=$result->fetch_all();
-  $result->free();
-  $mysqli->close();
-  return $data[0];
-}
-
-function deviazione_tot(){
-  $mysqli=db_connect();
-  $sql="SELECT STDDEV_POP(voto.valore) FROM voto";
-  $result=$mysqli->query($sql);
-  $data=$result->fetch_all();
-  $result->free();
-  $mysqli->close();
-  return $data[0];
-}
-
-function media_cls($classe){
-  $mysqli=db_connect();
-  $sql="SELECT AVG(valore) FROM(SELECT voto.valore FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe)) AS media_cls";
-  $result=$mysqli->query($sql);
-  $data=$result->fetch_all();
-  $result->free();
-  $mysqli->close();
-  return $data[0][0];
-}
-
-function massimo_cls($classe){
-  $mysqli=db_connect();
-  $sql="SELECT MAX(valore) FROM(SELECT voto.valore FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe)) AS massimo_cls";
-  $result=$mysqli->query($sql);
-  $data=$result->fetch_all();
-  $result->free();
-  $mysqli->close();
-  return $data[0][0];
-}
-
-function minimo_cls($classe){
-  $mysqli=db_connect();
-  $sql="SELECT MIN(valore) FROM(SELECT voto.valore FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe)) AS minimo_cls";
-  $result=$mysqli->query($sql);
-  $data=$result->fetch_all();
-  $result->free();
-  $mysqli->close();
-  return $data[0][0];
-}
-
-function deviazione_cls($classe){
-  $mysqli=db_connect();
-  $sql="SELECT STDDEV_POP(dev.valore) FROM(SELECT voto.valore FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe)) AS dev";
-  $result=$mysqli->query($sql);
-  $data=$result->fetch_all();
-  $result->free();
-  $mysqli->close();
-  return $data[0][0];
 }
 
 // ---------------------------------- GRAFICO ----------------------------------
 
 function mesi(){
-  $arr=[];
-  $sql1="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-09-%') AS val";
-  $sql2="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-10-%') AS val";
-  $sql3="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-11-%') AS val";
-  $sql4="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-12-%') AS val";
-  $sql5="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-01-%') AS val";
-  $sql6="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-02-%') AS val";
-  $sql7="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-03-%') AS val";
-  $sql8="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-04-%') AS val";
-  $sql9="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-05-%') AS val";
-  $sql10="SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-06-%') AS val";
-
-
+  $query = [];
+  for ($x = 9; $x <= 12; $x++) {
+    if($x<10){
+      array_push($query, "SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-0".$x."-%') AS val");
+    }
+    else{
+      array_push($query, "SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-".$x."-%') AS val");
+    }
+  }
+  for ($x = 1; $x <= 6; $x++) {
+    if($x<10){
+      array_push($query, "SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-0".$x."-%') AS val");
+    }
+    else{
+      array_push($query, "SELECT AVG(valore) FROM (SELECT voto.valore FROM voto WHERE voto.data LIKE '%-".$x."-%') AS val");
+    }
+  }
 
   $mysqli=db_connect();
+  $arr=[];
 
-
-
-  $result=$mysqli->query($sql1);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql2);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql3);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql4);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql5);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql6);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql7);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql8);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql9);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql10);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-
+  for ($x = 0; $x <= count($query)-1; $x++){
+    $result=$mysqli->query($query[$x]);
+    $data=$result->fetch_all();
+    $result->free();
+    array_push($arr,$data[0][0]);
+  }
 
   $mysqli->close();
-
   return $arr;
 }
 
 function mesi_cls($classe){
-  $arr=[];
-  $sql1="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-09-%')) AS val";
-  $sql2="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-10-%')) AS val";
-  $sql3="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-11-%')) AS val";
-  $sql4="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-12-%')) AS val";
-  $sql5="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-01-%')) AS val";
-  $sql6="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-02-%')) AS val";
-  $sql7="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-03-%')) AS val";
-  $sql8="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-04-%')) AS val";
-  $sql9="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-05-%')) AS val";
-  $sql10="SELECT AVG(valore) FROM (SELECT voto.valore, voto.data FROM voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = $classe AND voto.data LIKE '%-06-%')) AS val";
-
-
+  $query = [];
+  
+  for ($x = 9; $x <= 12; $x++) {
+    if($x<10){
+      array_push($query, "SELECT AVG(voto.valore) AS val FROM  voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = 1 AND voto.data LIKE '%-0".$x."-%')");
+    }
+    else{
+      array_push($query, "SELECT AVG(voto.valore) AS val FROM  voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = 1 AND voto.data LIKE '%-".$x."-%')");
+    }
+  }
+  for ($x = 1; $x <= 6; $x++) {
+    if($x<10){
+      array_push($query, "SELECT AVG(voto.valore) AS val FROM  voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = 1 AND voto.data LIKE '%-0".$x."-%')");
+    }
+    else{
+      array_push($query, "SELECT AVG(voto.valore) AS val FROM  voto WHERE voto.id_studente IN (SELECT studente.id_studente FROM studente WHERE studente.id_classe = 1 AND voto.data LIKE '%-".$x."-%')");
+    }
+  }
 
   $mysqli=db_connect();
+  $arr=[];
 
-
-
-  $result=$mysqli->query($sql1);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql2);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql3);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql4);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql5);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql6);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql7);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql8);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql9);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-  $result=$mysqli->query($sql10);
-  $data=$result->fetch_all();
-  $result->free();
-  array_push($arr,$data[0][0]);
-
-
+  for ($x = 0; $x <= count($query)-1; $x++){
+    $result=$mysqli->query($query[$x]);
+    $data=$result->fetch_all();
+    $result->free();
+    array_push($arr,$data[0][0]);
+  }
 
   $mysqli->close();
-
   return $arr;
 }
 
@@ -440,51 +296,10 @@ function edit_voto($id_std, $id_mat, $id_prof, $desc, $value, $id_voto){
 
 }
 
-
 function delete_voto($id_voto){
   $sql="DELETE FROM voto WHERE voto.id_voto = $id_voto";
   $mysqli=db_connect();
   $mysqli->query($sql);
   $mysqli->close(); 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// aggiorna
-function nazioni_mod_id($oldcode, $code, $name, $cont){
-  $mysqli=db_connect();
-  $sql="UPDATE country SET Code='$code', Name='$name', Continent='$cont' where Code='$oldcode'";
-  $result=$mysqli->query($sql);
-  $mysqli->close();
-}
-// elimina
-function delete($text){
-  $mysqli=db_connect();
-  $sql="DELETE FROM column WHERE attribute='$text'";
-  $result=$mysqli->query($sql);
-  $mysqli->close();
-}
-
-
-
 ?>
