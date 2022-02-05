@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html translate="no">
+<html lang="it">
 
 <head>
   <title>ClasseVirtuale</title>
