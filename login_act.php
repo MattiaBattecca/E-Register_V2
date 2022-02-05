@@ -4,6 +4,10 @@ include('dal.php');
 $username = $_POST["username"];
 $password = $_POST["password"];
 
+if($username == "" || $password == "" || strpos($username, " ") == false || strpos($password, " ") == false ){
+    header("Location: login_credenzialierrate.php");
+}
+
 
 $id = log_insegnante($username, $password);
 if($id>=0){

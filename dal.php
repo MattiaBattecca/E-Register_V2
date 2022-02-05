@@ -105,10 +105,11 @@ function mesi_cls($classe){
 // ---------------------------------- LOGIN ----------------------------------
 
 function log_insegnante($user, $pass){
-    
   $mysqli=db_connect();
-  $sql="SELECT insegnante.id_insegnante FROM insegnante WHERE LOWER(insegnante.username) LIKE LOWER('$user') AND insegnante.password LIKE '$pass'";
-  $result=$mysqli->query($sql);
+  $sql = $mysqli->prepare("SELECT insegnante.id_insegnante FROM insegnante WHERE LOWER(insegnante.username) LIKE LOWER('$user') AND insegnante.password LIKE '$pass'");
+  $sql->bind_param('s', $user, $pass);
+  $sql->execute();
+  $result = $sql->get_result();
   $data=$result->fetch_all();
   $result->free();
   $mysqli->close();
@@ -124,13 +125,26 @@ function log_insegnante($user, $pass){
 }
 
 function log_studente($user, $pass){
+
+
+  $mysqli=db_connect();
+  $sql = $mysqli->prepare("SELECT studente.id_studente FROM studente WHERE LOWER(studente.username) LIKE LOWER('$user') AND studente.password LIKE '$pass'");
+  $sql->bind_param('s', $user, $pass);
+  $sql->execute();
+  $result = $sql->get_result();
+  $data=$result->fetch_all();
+  $result->free();
+  $mysqli->close();
+
+/*
+
   $mysqli=db_connect();
   $sql="SELECT studente.id_studente FROM studente WHERE LOWER(studente.username) LIKE LOWER('$user') AND studente.password LIKE '$pass'";
   $result=$mysqli->query($sql);
   $data=$result->fetch_all();
   $result->free();
   $mysqli->close();
-
+*/
   if($data!=null)
   {
     return $data[0][0];
