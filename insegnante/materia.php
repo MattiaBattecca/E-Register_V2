@@ -1,4 +1,5 @@
 <?php
+//→ insegnante
 session_start();
 $id = $_GET["id"];
 if (!isset($_SESSION['id']) || $_SESSION['id'] != $id) {
@@ -10,7 +11,6 @@ include('../template/template_header_studente.php');
 include('../dal.php');
 $id_cls = $_GET["classe"];
 ?>
-
 <div class="container" id="cerca_classe">
   <h2>Materie della classe </h2>
   <?php 
@@ -20,6 +20,9 @@ $id_cls = $_GET["classe"];
   <?php 
     }
     ?>
+</div>
+<div class="container">
+  <a href="insegnante.php?id=<?=$id ?>" class="btn">Torna alle tue classi</a>
 </div>
 <?php
 include('../template/template_footer.php');
